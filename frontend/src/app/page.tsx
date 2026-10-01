@@ -79,21 +79,34 @@ const week = [
   {
     day: "SEX",
     date: "16",
-    subject: "Redação",
-    topic: "Construindo sua argumentação",
-    exercise: "1 proposta para desenvolver",
+    subject: "Química Orgânica",
+    topic: "Compostos de carbono",
+    exercise: "8 questões para praticar",
     color: "blue",
   },
 ];
 const plans = [
   {
-    name: "Essencial",
-    description: "Um caminho claro para começar.",
+    name: "Essencial em Ciências Humanas",
+    description: "História, geografia e sociedade no seu ritmo.",
     price: "29",
     cents: ",90",
     features: [
-      "Plano semanal de estudos",
-      "Apostilas digitais objetivas",
+      "Plano de estudos",
+      "Apostilas de Ciências Humanas",
+      "Exercícios com gabarito",
+      "Acesso pelo celular e computador",
+    ],
+    popular: false,
+  },
+  {
+    name: "Essencial em Ciências Exatas",
+    description: "Matemática e Natureza com foco no essencial.",
+    price: "29",
+    cents: ",90",
+    features: [
+      "Plano de estudos",
+      "Apostilas de Ciências Exatas",
       "Exercícios com gabarito",
       "Acesso pelo celular e computador",
     ],
@@ -105,10 +118,9 @@ const plans = [
     price: "49",
     cents: ",90",
     features: [
-      "Tudo do plano Essencial",
-      "Resolução comentada dos exercícios",
-      "Simulados para acompanhar a evolução",
-      "Trilha de revisão e redação",
+      "Tudo dos planos Essenciais",
+      "Trilha completa de estudos",
+      "Suporte total do material",
     ],
     popular: true,
   },
@@ -116,11 +128,11 @@ const plans = [
 const faqs = [
   [
     "Tenho pouco tempo por dia. A Passo é para mim?",
-    "Essa é a ideia. A proposta é organizar o conteúdo em blocos curtos de teoria, prática e revisão, para você estudar dentro do tempo que tem. Na prévia acima, você pode explorar um exemplo de rotina de 45 minutos.",
+    "Essa é a ideia. A proposta é organizar o conteúdo em blocos curtos de teoria, prática e revisão, para você estudar dentro do tempo que tem.",
   ],
   [
     "O que está incluído nos planos?",
-    "Os planos reúnem uma programação de estudos, apostilas digitais e exercícios. O Foco total acrescenta resoluções comentadas, simulados e uma trilha de revisão e redação. Os valores e benefícios apresentados são ilustrativos nesta versão.",
+    "Os planos reúnem uma programação de estudos, apostilas digitais e exercícios. O Foco total acrescenta tudo o que há nos outros planos para que seu estudo seja completo.",
   ],
   [
     "Posso estudar pelo celular?",
@@ -132,7 +144,7 @@ const faqs = [
   ],
   [
     "Já posso assinar e acessar os materiais?",
-    "Ainda não. Esta é uma demonstração da interface. Cadastro, pagamento, apostilas e área do aluno estarão disponíveis quando a plataforma for lançada. Nenhum dado ou pagamento é enviado nesta versão.",
+    "Pode! Basta entrar na plataforma da Cakto e baixar o produto em formato de pdf diretamente para o seu dispositivo, depois disso é só começar os estudos.",
   ],
 ];
 
@@ -182,14 +194,6 @@ export default function Home() {
             <a href="#sobre">Sobre</a>
             <a href="#planos">Planos</a>
           </nav>
-          <div className="nav-actions">
-            <Button variant="ghost" onClick={() => openAuth("login")}>
-              Entrar
-            </Button>
-            <Button onClick={() => openAuth("register")}>
-              Começar agora <ArrowUpRight data-icon="inline-end" />
-            </Button>
-          </div>
           <Button
             variant="ghost"
             size="icon"
@@ -238,15 +242,12 @@ export default function Home() {
               <h1 id="hero-title">
                 Ainda dá tempo
                 <br />
-                de mudar a sua
+                de mudar o seu
                 <br />
-                <em>história.</em>
-                <span className="headline-spark" aria-hidden="true">
-                  ✳
-                </span>
+                <em>caminho.</em>
               </h1>
               <p className="hero-description">
-                O Enem está chegando. E você não precisa fazer tudo sozinho. Um
+                O Enem está chegando e você não precisa fazer tudo sozinho. Um
                 plano de estudos que cabe na sua rotina, com foco no que
                 realmente importa.
               </p>
@@ -265,7 +266,7 @@ export default function Home() {
               </div>
               <div className="hero-reassurance">
                 <span>
-                  <Check size={14} /> No seu ritmo
+                  <Check size={14} /> Eficiência
                 </span>
                 <span>
                   <Check size={14} /> Sem sobrecarga
@@ -292,9 +293,6 @@ export default function Home() {
             <div className="hero-visual">
               <div className="orbit orbit-one" aria-hidden="true" />
               <div className="orbit orbit-two" aria-hidden="true" />
-              <span className="visual-spark" aria-hidden="true">
-                ✦
-              </span>
               <div className="floating-note note-time">
                 <span className="note-icon">
                   <Clock3 size={22} />
@@ -309,7 +307,6 @@ export default function Home() {
                   <span>
                     <span className="tiny-mark">↗</span> MEU PLANO DE ESTUDOS
                   </span>
-                  <span className="preview-label">PRÉVIA</span>
                 </div>
                 <div className="planner-greeting">
                   <div>
@@ -321,7 +318,7 @@ export default function Home() {
                   </span>
                 </div>
                 <div className="week-label">
-                  <span>Uma semana possível</span>
+                  <span></span>
                   <CalendarDays size={15} />
                 </div>
                 <div
@@ -434,19 +431,11 @@ export default function Home() {
         >
           <div className="section-heading">
             <div>
-              <p className="eyebrow">
-                MENOS “POR ONDE COMEÇAR?”. MAIS COMEÇAR.
-              </p>
               <h2 id="how-title">
                 Você traz o sonho.
                 <br />A gente organiza <em>o caminho.</em>
               </h2>
             </div>
-            <p>
-              Entre o trabalho, a escola e a vida, estudar pode parecer
-              impossível. Vamos transformar esse “não dá” em um passo de cada
-              vez.
-            </p>
           </div>
           <div className="steps-grid">
             {[
@@ -497,13 +486,6 @@ export default function Home() {
               Só de um <em>próximo passo.</em>
             </h2>
           </div>
-          <p>
-            Quarenta e cinco minutos hoje.
-            <br />
-            Um assunto que faz sentido amanhã.
-            <br />
-            <strong>É assim que a confiança se constrói.</strong>
-          </p>
         </section>
         <section
           className="section plans-section"
@@ -544,9 +526,6 @@ export default function Home() {
                     <b>{plan.cents}</b>
                     <span>/mês</span>
                   </div>
-                  <span className="price-caption">
-                    Valor ilustrativo · assinatura mensal
-                  </span>
                   <Separator className="my-6" />
                   <ul>
                     {plan.features.map((feature) => (
@@ -560,16 +539,15 @@ export default function Home() {
                     variant={plan.popular ? "default" : "outline"}
                     size="lg"
                     className="w-full"
-                    onClick={() => openAuth("register", plan.name)}
                   >
-                    Quero o {plan.name} <ArrowUpRight data-icon="inline-end" />
+                    Quero esse plano <ArrowUpRight data-icon="inline-end" />
                   </Button>
                 </article>
               ))}
             </div>
             <p className="plan-footnote">
-              <ShieldCheck size={16} /> Você decide o seu próximo passo. Sem
-              pagamentos nesta demonstração.
+              <ShieldCheck size={16} /> Você decide o seu próximo passo. Com
+              segurança total na hora do pagamento.
             </p>
           </div>
         </section>
@@ -599,31 +577,11 @@ export default function Home() {
             ))}
           </Accordion>
         </section>
-        <section className="closing-section">
-          <div className="container closing-inner">
-            <span className="closing-star" aria-hidden="true">
-              ✳
-            </span>
-            <p className="eyebrow">O PRIMEIRO PASSO PODE SER HOJE</p>
-            <h2>
-              O tempo que você tem
-              <br />
-              pode ser <em>o seu começo.</em>
-            </h2>
-            <p>Respira. Escolhe um plano. A gente segue com você.</p>
-            <Button variant="secondary" size="lg" asChild>
-              <a href="#planos">
-                Quero dar meu primeiro passo{" "}
-                <ArrowUpRight data-icon="inline-end" />
-              </a>
-            </Button>
-          </div>
-        </section>
       </main>
       <footer className="site-footer container">
         <div className="footer-top">
           <Brand />
-          <span>Pequenos passos. Novas possibilidades.</span>
+          <span></span>
           <a href="#inicio">
             Voltar ao topo <ArrowUpRight size={16} />
           </a>

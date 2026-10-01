@@ -767,11 +767,11 @@
   color: var(--muted-foreground);
 }
 .plans-grid {
-  max-width: 790px;
+  max-width: 1080px;
   margin: 56px auto 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 .plan {
   position: relative;
@@ -913,44 +913,6 @@
   line-height: 1.85;
   font-size: 12px;
 }
-.closing-section {
-  background: #174e52;
-  color: #f8f6eb;
-  overflow: hidden;
-}
-.closing-inner {
-  text-align: center;
-  padding-block: 65px;
-  position: relative;
-}
-.closing-inner .eyebrow {
-  justify-content: center;
-  color: #b3c9b9;
-}
-.closing-inner h2 {
-  font-size: 48px;
-  margin-top: 18px;
-}
-.closing-inner h2 em {
-  color: #e9cd87;
-}
-.closing-inner > p:not(.eyebrow) {
-  color: #b9ccc0;
-  font-size: 13px;
-  margin-top: 20px;
-}
-.closing-inner [data-slot="button"] {
-  margin-top: 25px;
-}
-.closing-star {
-  position: absolute;
-  font-size: 200px;
-  font-family: Georgia, serif;
-  color: #8aa89820;
-  top: 60px;
-  left: 20px;
-  transform: rotate(15deg);
-}
 .site-footer {
   padding-block: 36px 25px;
 }
@@ -1083,6 +1045,21 @@
   .benefits-inner > span {
     font-size: 10px;
     gap: 7px;
+  }
+  .plans-grid {
+    gap: 12px;
+  }
+  .plan {
+    padding: 22px 18px;
+  }
+  .plan-featured {
+    padding: 21px 17px;
+  }
+  .plan-heading h3 {
+    font-size: 23px;
+  }
+  .plan-price strong {
+    font-size: 48px;
   }
   .encouragement {
     padding: 30px;
@@ -1320,20 +1297,6 @@
   }
   .faq-list [data-slot="accordion-trigger"] {
     font-size: 13px;
-  }
-  .closing-inner {
-    padding-block: 55px;
-  }
-  .closing-inner h2 {
-    font-size: 37px;
-  }
-  .closing-star {
-    font-size: 140px;
-    left: -60px;
-    top: 100px;
-  }
-  .closing-inner > p:not(.eyebrow) {
-    font-size: 12px;
   }
   .footer-top {
     flex-wrap: wrap;
