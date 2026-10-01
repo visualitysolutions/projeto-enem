@@ -138,7 +138,15 @@ const faqs = [
 
 function Brand() {
   return (
-    <a href="#inicio" className="brand" aria-label="Passo — início">
+    <a
+      href="#inicio"
+      className="brand"
+      aria-label="Passo — início"
+      onClick={(event) => {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
+    >
       <span className="brand-symbol">
         <MoveUpRight aria-hidden="true" />
       </span>
@@ -621,7 +629,13 @@ export default function Home() {
         <div className="footer-top">
           <Brand />
           <span></span>
-          <a href="#inicio">
+          <a
+            href="#inicio"
+            onClick={(event) => {
+              event.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             Voltar ao topo <ArrowUpRight size={16} />
           </a>
         </div>
