@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  ArrowRight,
   ArrowUpRight,
   BookOpen,
   CalendarDays,
@@ -13,7 +12,6 @@ import {
   Clock3,
   Compass,
   Feather,
-  GraduationCap,
   Menu,
   MoveUpRight,
   Play,
@@ -24,22 +22,12 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -144,7 +132,7 @@ const faqs = [
   ],
   [
     "Já posso assinar e acessar os materiais?",
-    "Pode! Basta entrar na plataforma da Cakto e baixar o produto em formato de pdf diretamente para o seu dispositivo, depois disso é só começar os estudos.",
+    "Pode! Basta acessar a plataforma da Cakto e baixar o produto em formato de PDF diretamente para o seu dispositivo; depois disso, é só começar os estudos.",
   ],
 ];
 
@@ -162,22 +150,47 @@ function Brand() {
 export default function Home() {
   const [day, setDay] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [auth, setAuth] = useState<"login" | "register" | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const authOpener = useRef<HTMLElement | null>(null);
+  const [activeSection, setActiveSection] = useState("inicio");
+  const navigationLockUntil = useRef(0);
   const lesson = week[day];
-  function openAuth(mode: "login" | "register", plan?: string) {
-    authOpener.current = document.activeElement as HTMLElement | null;
-    setAuth(mode);
-    setSelectedPlan(plan ?? null);
-    setSubmitted(false);
+
+  function navigateTo(section: string) {
+    setActiveSection(section);
     setMenuOpen(false);
+    navigationLockUntil.current = Date.now() + 1000;
+
+    if (section === "inicio") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    document.getElementById(section)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitted(true);
-  }
+
+  useEffect(() => {
+    const updateActiveSection = () => {
+      if (Date.now() < navigationLockUntil.current) return;
+
+      const sobre = document.getElementById("sobre");
+      const planos = document.getElementById("planos");
+      const marker = window.scrollY + window.innerHeight * 0.3;
+
+      if (planos && marker >= planos.offsetTop) {
+        setActiveSection("planos");
+      } else if (sobre && marker >= sobre.offsetTop) {
+        setActiveSection("sobre");
+      } else {
+        setActiveSection("inicio");
+      }
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    return () => window.removeEventListener("scroll", updateActiveSection);
+  }, []);
 
   return (
     <>
@@ -188,17 +201,41 @@ export default function Home() {
         <div className="container nav-wrap">
           <Brand />
           <nav className="desktop-nav" aria-label="Navegação principal">
-            <a className="nav-active" href="#inicio">
+            <a
+              className={cn(activeSection === "inicio" && "nav-active")}
+              href="#inicio"
+              onClick={(event) => {
+                event.preventDefault();
+                navigateTo("inicio");
+              }}
+            >
               Início
             </a>
-            <a href="#sobre">Sobre</a>
-            <a href="#planos">Planos</a>
+            <a
+              className={cn(activeSection === "sobre" && "nav-active")}
+              href="#sobre"
+              onClick={(event) => {
+                event.preventDefault();
+                navigateTo("sobre");
+              }}
+            >
+              Sobre
+            </a>
+            <a
+              className={cn(activeSection === "planos" && "nav-active")}
+              href="#planos"
+              onClick={(event) => {
+                event.preventDefault();
+                navigateTo("planos");
+              }}
+            >
+              Planos
+            </a>
           </nav>
           <Button
             variant="ghost"
             size="icon"
             className="mobile-toggle"
-            id="mobile-menu-toggle"
             aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
@@ -218,16 +255,18 @@ export default function Home() {
               ["Sobre", "sobre"],
               ["Planos", "planos"],
             ].map(([label, id]) => (
-              <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+              <a
+                key={id}
+                className={cn(activeSection === id && "mobile-nav-active")}
+                href={`#${id}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigateTo(id);
+                }}
+              >
                 {label}
               </a>
             ))}
-            <Button variant="outline" onClick={() => openAuth("login")}>
-              Entrar
-            </Button>
-            <Button onClick={() => openAuth("register")}>
-              Criar minha conta
-            </Button>
           </nav>
         )}
       </header>
@@ -594,114 +633,6 @@ export default function Home() {
           <p>Plataforma independente, sem vínculo com o Inep ou o MEC.</p>
         </div>
       </footer>
-      <Dialog
-        open={auth !== null}
-        onOpenChange={(open) => {
-          if (!open) setAuth(null);
-        }}
-      >
-        <DialogContent onCloseAutoFocus={(event) => {
-          event.preventDefault();
-          const opener = authOpener.current;
-          if (opener?.isConnected) opener.focus();
-          else document.getElementById("mobile-menu-toggle")?.focus();
-        }}>
-          <DialogHeader>
-            <div className="dialog-brand">
-              <GraduationCap size={30} />
-            </div>
-            <DialogTitle>
-              {submitted
-                ? "Seu próximo passo está chegando."
-                : auth === "login"
-                  ? "Bom ter você de volta."
-                  : "Toda história tem um começo."}
-            </DialogTitle>
-            <DialogDescription>
-              {submitted
-                ? "Esta é uma prévia da plataforma. Nenhuma conta foi criada, nenhum dado foi enviado e nenhuma cobrança foi realizada."
-                : auth === "login"
-                  ? "Entre para continuar de onde parou."
-                  : "Comece a construir uma rotina de estudos possível."}
-            </DialogDescription>
-          </DialogHeader>
-          {submitted ? (
-            <Button onClick={() => setAuth(null)}>
-              Continuar explorando <ArrowRight data-icon="inline-end" />
-            </Button>
-          ) : (
-            <>
-              <Badge variant="secondary">
-                {selectedPlan
-                  ? `Plano selecionado: ${selectedPlan}`
-                  : "Prévia da plataforma"}
-              </Badge>
-              <form onSubmit={submit}>
-                <FieldGroup>
-                  {auth === "register" && (
-                    <Field>
-                      <FieldLabel htmlFor="name">
-                        Como podemos te chamar?
-                      </FieldLabel>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="Seu nome"
-                        autoComplete="given-name"
-                        required
-                        maxLength={100}
-                      />
-                    </Field>
-                  )}
-                  <Field>
-                    <FieldLabel htmlFor="email">E-mail</FieldLabel>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="voce@exemplo.com"
-                      autoComplete="email"
-                      required
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="password">Senha</FieldLabel>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Pelo menos 8 caracteres"
-                      minLength={8}
-                      autoComplete={
-                        auth === "login" ? "current-password" : "new-password"
-                      }
-                      required
-                    />
-                  </Field>
-                  <Button size="lg" type="submit">
-                    {auth === "login" ? "Entrar" : "Criar minha conta"}
-                    <ArrowRight data-icon="inline-end" />
-                  </Button>
-                </FieldGroup>
-              </form>
-              <p className="demo-note">
-                Demonstração: os dados não serão enviados ou armazenados.
-              </p>
-              <Button
-                variant="link"
-                onClick={() => {
-                  setAuth(auth === "login" ? "register" : "login");
-                  setSelectedPlan(null);
-                }}
-              >
-                {auth === "login"
-                  ? "Ainda não tem conta? Cadastre-se"
-                  : "Já tem uma conta? Entre"}
-              </Button>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

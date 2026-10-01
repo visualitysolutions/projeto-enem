@@ -23,13 +23,13 @@ npm start
 - Navegação por âncoras para início, sobre e planos; menu próprio no celular.
 - Prévia semanal interativa: clicar em um dia altera a matéria e os exercícios exibidos.
 - Comparação entre dois planos e cadastro com o plano selecionado.
-- Diálogos de login/cadastro, validação nativa de campos e confirmação explícita de demonstração.
+- Fluxo de navegação e seleção de planos sem autenticação.
 - Perguntas frequentes expansíveis e navegação por teclado.
 - Metadados em português, favicon próprio, suporte a movimento reduzido e fontes locais.
 
 ## Limites desta entrega
 
-Somente a landing page foi implementada. Não há backend, autenticação, cobrança, área do aluno ou download de materiais. Formulários não enviam nem armazenam dados. A marca Passo, os preços e os benefícios dos planos são propostas ilustrativas para revisão antes do lançamento.
+Somente a landing page foi implementada. Não há backend, autenticação, cobrança, área do aluno ou download de materiais. A marca Passo, os preços e os benefícios dos planos são propostas ilustrativas para revisão antes do lançamento.
 
 ## Onde editar
 
